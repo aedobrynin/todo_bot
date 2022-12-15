@@ -1,0 +1,17 @@
+version: '3.9'
+services:
+  bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - redis
+    environment:
+      - REDIS_OM_URL=redis://redis:6379
+  redis:
+    image: redislabs/redismod:latest
+    restart: always
+    command: redis-server
+    volumes:
+      - ./redis/redis_data:/data
+      - ./redis/redis.conf:/data/redis-server
