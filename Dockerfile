@@ -3,6 +3,7 @@ FROM python:3.10
 WORKDIR /bot
 
 ADD main.py ./
+ADD states.py ./
 ADD models ./models
 ADD requirements.txt ./
 
