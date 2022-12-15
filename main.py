@@ -1,16 +1,24 @@
 import asyncio
+import os
 
-from aredis_om import Migrator, get_redis_connection
+from redis_om import Migrator
+from aiogram import Bot, Dispatcher, executor, types
 
-from models import user_data
+
+# Initialize bot and dispatcher
+bot = Bot(token=os.environ['TELEGRAM_BOT_TOKEN'])
+dp = Dispatcher(bot)
 
 
-async def main():
-    await Migrator().run()
-    test = user_data.UserData(
-         user_id='test_user')
-    await test.save()
+@dp.message_handler(commands=['start', 'help'])
+async def send_welcome(message: types.Message):
+    await message.reply("Hi!\nI'm EchoBot!\nPowered by aiogram.")
+
+
+def main():
+    Migrator().run()
+    executor.start_polling(dp, skip_updates=True)
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()
