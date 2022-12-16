@@ -3,6 +3,7 @@ from aiogram.dispatcher import FSMContext
 
 from states import MainState
 from models.user_data import UserData
+import handlers.helpers as helpers
 
 
 async def mark_done_got_command(message: types.Message):
@@ -11,15 +12,12 @@ async def mark_done_got_command(message: types.Message):
 
 
 async def mark_done_got_index(message: types.Message, state: FSMContext):
-    try:
-        task_index = int(message.text) - 1
-    except ValueError:
-        await message.reply('It\'s not a number')
+    task_index = await helpers.get_task_index(message)
+    if task_index is None:
         return
 
     user_data = await UserData.get_by_user_id(message.from_id)
-    if user_data is None or task_index not in range(len(user_data.tasks)):
-        await message.reply('Bad task index')
+    if not await helpers.check_task_index_bounds(user_data, task_index, message):
         return
 
     await state.finish()
