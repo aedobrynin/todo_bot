@@ -22,6 +22,12 @@ async def add_task_got_description(message: types.Message, state: FSMContext):
         return
 
     user_data = await UserData.get_or_make_new(message.from_id)
+
+    tasks_limit = os.environ.get('TODO_BOT_MAX_TASKS_IN_LIST', default=1000)
+    if len(user_data.tasks) > tasks_limit:
+        await message.reply(f'You have too much tasks in your list, max tasks count is {tasks_limit}')
+        return
+
     user_data.tasks.append(Task(description=message.text, done=False))
     await user_data.save()
     await message.reply('Your task was added to the list!')
