@@ -5,6 +5,7 @@ WORKDIR /bot
 ADD main.py ./
 ADD states.py ./
 ADD models ./models
+ADD handlers ./handlers
 ADD requirements.txt ./
 
 RUN pip3 install -r requirements.txt
