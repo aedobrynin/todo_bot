@@ -7,7 +7,7 @@ from models.user_data import UserData
 
 async def mark_undone_got_command(message: types.Message):
     await MainState.mark_undone.set()
-    await message.reply('Enter task number to remove the mark or /cancel to cancel')
+    await message.reply('Enter task index to remove the mark or /cancel to cancel')
 
 
 async def mark_undone_got_index(message: types.Message, state: FSMContext):
