@@ -25,4 +25,4 @@ async def mark_done_got_index(message: types.Message, state: FSMContext):
     await state.finish()
     user_data.tasks[task_index].done = True
     await user_data.save()
-    await message.reply('Marked as done. Good job!')
+    await message.reply('Marked as done\nGood job!')
