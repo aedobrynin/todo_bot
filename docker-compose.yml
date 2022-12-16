@@ -8,7 +8,7 @@ services:
       - redis
     environment:
       - REDIS_OM_URL=redis://redis:6379
-      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - TODO_BOT_TELEGRAM_BOT_TOKEN=${TODO_BOT_TELEGRAM_BOT_TOKEN}
   redis:
     image: redislabs/redismod:latest
     restart: always
