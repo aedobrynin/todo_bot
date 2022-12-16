@@ -12,6 +12,7 @@ import handlers.show_tasks
 import handlers.welcome
 import handlers.mark_done
 import handlers.mark_undone
+import handlers.clear_tasks
 
 
 def setup_handlers(dispatcher: Dispatcher):
@@ -31,6 +32,8 @@ def setup_handlers(dispatcher: Dispatcher):
 
     dispatcher.register_message_handler(handlers.mark_undone.mark_undone_got_command, commands='undone')
     dispatcher.register_message_handler(handlers.mark_undone.mark_undone_got_index, state=MainState.mark_undone)
+
+    dispatcher.register_message_handler(handlers.clear_tasks.clear_tasks, commands='clear')
 
 
 async def on_startup(dispatcher):
