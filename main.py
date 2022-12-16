@@ -1,12 +1,16 @@
 import os
+import typing
 
 from redis_om import Migrator
+from aredis_om import NotFoundError
+
 from aiogram import Bot, Dispatcher, types
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher import FSMContext
 from aiogram.utils import executor
 
 from states import MainState
+from models.user_data import UserData
 
 bot = Bot(token=os.environ['TODO_BOT_TELEGRAM_BOT_TOKEN'])
 storage = MemoryStorage()
@@ -15,7 +19,8 @@ dp = Dispatcher(bot, storage=storage)
 
 @dp.message_handler(commands=['start', 'help'])
 async def send_welcome(message: types.Message):
-    await message.reply("Hi!\nI'm EchoBot!\nPowered by aiogram.")
+    # TODO: fill help command reply
+    await message.reply("Hi!\nI'm To Do Bot!\n")
 
 
 @dp.message_handler(commands='cancel',
@@ -42,6 +47,25 @@ async def add_task_got_description(message: types.Message, state: FSMContext):
 
     # TODO: save the task
     await message.reply('Your task was added to the list!')
+
+
+@dp.message_handler(commands='show')
+async def show_tasks(message: types.Message):
+    user_data: typing.Optional[UserData] = None
+    try:
+        user_data = await UserData.find(UserData.user_id == message.from_id).first()
+    except NotFoundError:
+        pass
+
+    if user_data is None or not user_data.tasks:
+        await message.reply('You have no tasks at the moment')
+        return
+
+    reply_lines = ["Your tasks:"]
+    for i, task in user_data.tasks:
+        line = f'{i}) {task.description} {"✅" if task.done else ""}'
+        reply_lines.append(line)
+    await message.reply('\n'.join(reply_lines))
 
 
 def main():

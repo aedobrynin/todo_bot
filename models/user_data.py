@@ -6,5 +6,5 @@ from models.task import Task
 
 
 class UserData(JsonModel):
-    user_id: str = Field(index=True)
+    user_id: int = Field(index=True)
     tasks: typing.List[Task] = []
